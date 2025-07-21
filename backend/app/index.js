@@ -13,6 +13,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const importirRoutes = require('./routes/importir');
+app.use('/api/importir', importirRoutes);
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
