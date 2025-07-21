@@ -8,28 +8,36 @@
 // - satuan VARCHAR(25)
 
 "use strict";
-const { Model, DataTypes } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
-  class Barang extends Model {
-    static associate(models) {
-      Barang.belongsTo(models.instansi, {
-        foreignKey: id_instansi,
-        targetKey: "id",
-        allowNull: "true",
-        onDelete: "CASCADE",
-      });
+  const Barang = sequelize.define(
+    "barang",
+    {
+      part_number: { type: DataTypes.STRING, primaryKey: true },
+      hs_code: DataTypes.STRING,
+      deskripsi: DataTypes.TEXT,
+      pos_tarif: DataTypes.DOUBLE,
+      status_lartas: DataTypes.ENUM(
+        "Lartas Export",
+        "Lastas Import",
+        "Non-Lartas"
+      ),
+      satuan: DataTypes.STRING,
+    },
+    {
+      timestamps: true, // hapus kalau pakai createdAt/updatedAt
     }
-  }
-  Barang.init({
-    part_number: { type: DataTypes.STRING, primaryKey: true },
-    hs_code: DataTypes.STRING,
-    deskripsi: DataTypes.TEXT,
-    pos_tarif: DataTypes.DOUBLE,
-    status_lartas: DataTypes.ENUM(
-      "Lartas Export",
-      "Lastas Import",
-      "Non-Lartas"
-    ),
-    satuan: DataTypes.STRING,
-  });
+  );
+
+  // Definisi relasi
+  Barang.associate = (models) => {
+    Barang.belongsTo(models.instansi, {
+      foreignKey: "id_instansi",
+      targetKey: "id",
+      allowNull: true,
+      onDelete: "CASCADE",
+    });
+  };
+
+  return Barang;
 };
