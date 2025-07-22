@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   const PIB = sequelize.define(
     "pib",
     {
-      id: { type: DataTypes.INTEGER, primaryKey: true },
+      id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       id_penjual: DataTypes.INTEGER,
       id_importir: DataTypes.INTEGER,
       id_sarana_pengangkutan: DataTypes.INTEGER,
