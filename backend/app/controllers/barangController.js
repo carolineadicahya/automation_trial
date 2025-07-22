@@ -75,12 +75,12 @@ exports.create = async (req, res, next) => {
 
 // update by id
 exports.update = async (req, res, next) => {
-  const { part_number } = req.params;
+  const { id } = req.params;
   const { hs_code, deskripsi, pos_tarif, status_lartas, satuan } = req.body;
   try {
     const [num] = await Barang.update(
       { hs_code, deskripsi, pos_tarif, status_lartas, satuan },
-      { where: { part_number } }
+      { where: { part_number: id } }
     );
     if (num === 1) {
       res.status(202).json({
