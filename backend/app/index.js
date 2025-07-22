@@ -7,14 +7,29 @@ const port = 5000;
 const db = require("./models"); // Make sure ./models/index.js exports sequelize and models
 
 // Sync database
-db.sequelize.sync({ force: true }); // or { force: true } for dropping and recreating
+db.sequelize.sync({ alter: true }); // or { force: true } for dropping and recreating
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+const barangRoutes = require('./routes/barang');
+const detailPibRoutes = require('./routes/detail_pib');
 const importirRoutes = require('./routes/importir');
+const instansiRoutes = require('./routes/instansi');
+const penjualRoutes = require('./routes/penjual');
+const pibRoutes = require('./routes/pib');
+const requiredDocsRoutes = require('./routes/required_docs');
+const saranaPengangkutanRoutes = require('./routes/sarana_pengangkutan');
+
+app.use('/api/barang', barangRoutes);
+app.use('/api/detail_pib', detailPibRoutes);
 app.use('/api/importir', importirRoutes);
+app.use('/api/instansi', instansiRoutes);
+app.use('/api/penjual', penjualRoutes);
+app.use('/api/pib', pibRoutes);
+app.use('/api/required_docs', requiredDocsRoutes);
+app.use('/api/sarana_pengangkutan', saranaPengangkutanRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");

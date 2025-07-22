@@ -1,0 +1,1018 @@
+{
+	"info": {
+		"_postman_id": "429f378d-fd69-4192-bba9-d43f3f3dd9bc",
+		"name": "Automation Trial API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17856292"
+	},
+	"item": [
+		{
+			"name": "Barang",
+			"item": [
+				{
+					"name": "Get All Barang",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/barang",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"barang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Barang by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/barang/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"barang",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Barang",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"part_number\": \"PN001\",\n  \"hs_code\": \"HS1234\",\n  \"deskripsi\": \"Sample Barang\",\n  \"pos_tarif\": \"1234.56\",\n  \"status_lartas\": \"Non-Lartas\",\n  \"satuan\": \"pcs\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/barang",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"barang"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Barang",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"hs_code\": \"HS5678\",\n  \"deskripsi\": \"Updated Barang\",\n  \"pos_tarif\": \"5678.90\",\n  \"status_lartas\": \"Restricted\",\n  \"satuan\": \"box\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/barang/PN001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"barang",
+								"PN001"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Barang",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/barang/PN001",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"barang",
+								"PN001"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Detail PIB",
+			"item": [
+				{
+					"name": "Get All Detail PIB",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/detail_pib",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"detail_pib"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Detail PIB by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/detail_pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"detail_pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Detail PIB",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_pib\": 1,\n  \"jumlah\": 100,\n  \"dimensi\": \"10x10x10\",\n  \"mata_uang\": \"IDR\",\n  \"no_invoice\": \"INV001\",\n  \"no_bl\": \"BL001\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/detail_pib",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"detail_pib"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Detail PIB",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_pib\": 1,\n  \"jumlah\": 200,\n  \"dimensi\": \"20x20x20\",\n  \"mata_uang\": \"USD\",\n  \"no_invoice\": \"INV002\",\n  \"no_bl\": \"BL002\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/detail_pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"detail_pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Detail PIB",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/detail_pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"detail_pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Importir",
+			"item": [
+				{
+					"name": "Get All Importir",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/importir",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"importir"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Importir by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/importir/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"importir",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Importir",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nitku\": \"NITKU001\",\n  \"nib\": \"NIB001\",\n  \"alamat\": \"Jl. Contoh No.1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/importir",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"importir"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Importir",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nitku\": \"NITKU002\",\n  \"nib\": \"NIB002\",\n  \"alamat\": \"Jl. Update No.2\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/importir/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"importir",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Importir",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/importir/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"importir",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Instansi",
+			"item": [
+				{
+					"name": "Get All Instansi",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/instansi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"instansi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Instansi by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/instansi/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"instansi",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Instansi",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_instansi\": \"Instansi Contoh\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/instansi",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"instansi"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Instansi",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama_instansi\": \"Instansi Update\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/instansi/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"instansi",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Instansi",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/instansi/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"instansi",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Penjual",
+			"item": [
+				{
+					"name": "Get All Penjual",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/penjual",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"penjual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Penjual by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/penjual/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"penjual",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Penjual",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Penjual Contoh\",\n  \"alamat\": \"Jl. Penjual No.1\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/penjual",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"penjual"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Penjual",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Penjual Update\",\n  \"alamat\": \"Jl. Update No.2\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/penjual/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"penjual",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Penjual",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/penjual/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"penjual",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "PIB",
+			"item": [
+				{
+					"name": "Get All PIB",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/pib",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"pib"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get PIB by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create PIB",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_penjual\": 1,\n  \"id_importir\": 1,\n  \"id_sarana_pengangkutan\": 1,\n  \"tipe_pengangkutan\": \"Laut\",\n  \"pelabuhan_muat\": \"Tanjung Priok\",\n  \"pelabuhan_tujuan\": \"Belawan\",\n  \"tanggal_berangkat\": \"2023-01-01\",\n  \"ndpbm\": 10000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/pib",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"pib"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update PIB",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_penjual\": 2,\n  \"id_importir\": 2,\n  \"id_sarana_pengangkutan\": 2,\n  \"tipe_pengangkutan\": \"Udara\",\n  \"pelabuhan_muat\": \"Soekarno Hatta\",\n  \"pelabuhan_tujuan\": \"Ngurah Rai\",\n  \"tanggal_berangkat\": \"2023-02-01\",\n  \"ndpbm\": 20000\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete PIB",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/pib/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"pib",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Required Docs",
+			"item": [
+				{
+					"name": "Get All Required Docs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/required_docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"required_docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Required Docs by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/required_docs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"required_docs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Required Docs",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_barang\": \"PN001\",\n  \"tipe_dokumen\": \"Invoice\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/required_docs",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"required_docs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Required Docs",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"id_barang\": 2,\n  \"tipe_dokumen\": \"Packing List\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/required_docs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"required_docs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Required Docs",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/required_docs/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"required_docs",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sarana Pengangkutan",
+			"item": [
+				{
+					"name": "Get All Sarana Pengangkutan",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/sarana_pengangkutan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"sarana_pengangkutan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Sarana Pengangkutan by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/sarana_pengangkutan/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"sarana_pengangkutan",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Sarana Pengangkutan",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Kapal Laut\",\n  \"nomor_identitas\": \"ID123\",\n  \"bendera\": \"Indonesia\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/sarana_pengangkutan",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"sarana_pengangkutan"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Sarana Pengangkutan",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"nama\": \"Kapal Udara\",\n  \"nomor_identitas\": \"ID456\",\n  \"bendera\": \"Malaysia\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:5000/api/sarana_pengangkutan/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"sarana_pengangkutan",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Sarana Pengangkutan",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:5000/api/sarana_pengangkutan/1",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "5000",
+							"path": [
+								"api",
+								"sarana_pengangkutan",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

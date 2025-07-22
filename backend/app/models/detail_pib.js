@@ -2,10 +2,10 @@
 // - id (PK) INT
 // - id_barang (FK) INT
 // - jumlah INT
-// - dimensi INT
+// - dimensi INT - CHANGED data type to VARCHAR
 // - mata_uang VARCHAR(255)
-// - fob INT
-// - cif INT
+// - fob INT - DEPRECATED changed to no_invoice
+// - cif INT - DEPRECATED changed to no_bl
 
 "use strict";
 
@@ -16,10 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       id_pib: DataTypes.INTEGER,
       jumlah: DataTypes.INTEGER,
-      dimensi: DataTypes.INTEGER,
+      dimensi: DataTypes.STRING,
       mata_uang: DataTypes.STRING,
-      no_invoice: DataTypes.INTEGER,
-      no_bl: DataTypes.INTEGER,
+      no_invoice: DataTypes.STRING,
+      no_bl: DataTypes.STRING,
     },
     {
       timestamps: true, // hapus kalau pakai createdAt/updatedAt
