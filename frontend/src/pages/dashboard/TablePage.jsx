@@ -158,8 +158,13 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
       });
   };
 
-  const handleDelete = (id) => {
-    setDeleteId(id);
+  const handleDelete = (id, row) => {
+    // For barang, use part_number as id; for others, use id
+    if (resourceKey === 'barang') {
+      setDeleteId(row.part_number);
+    } else {
+      setDeleteId(id);
+    }
     setDeleteOpen(true);
   };
   const confirmDelete = () => {
@@ -169,6 +174,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
         setDeleteOpen(false);
         setDeleteId(null);
         fetchData();
+        fetchCount();
       });
   };
   const cancelDelete = () => {
@@ -334,7 +340,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
         </Typography>
         <div>
           <Typography variant="small" className="mr-4">Total: {total}</Typography>
-          <Button color="blue" onClick={handleOpenAdd} className="font-sans" disabled={openAdd || openEdit}>Add {resourceLabel}</Button>
+          {/* <Button color="blue" onClick={handleOpenAdd} className="font-sans" disabled={openAdd || openEdit}>Add {resourceLabel}</Button> */}
         </div>
       </div>
       {/* Inline Add/Edit Form */}
@@ -454,17 +460,17 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                   <td className="px-4 py-2">
                     {(resourceKey === 'pib' || resourceKey === 'barang') ? (
                       <div className="flex flex-row gap-2">
-                        <IconButton
+                        {/* <IconButton
                           color="amber"
                           onClick={() => handleOpenEdit(row)}
                           disabled={openAdd || openEdit}
                           className="font-sans"
                         >
                           <PencilIcon className="w-5 h-5" />
-                        </IconButton>
+                        </IconButton> */}
                         <IconButton
                           color="red"
-                          onClick={() => handleDelete(row.id || row.part_number)}
+                          onClick={() => handleDelete(row.id || row.part_number, row)}
                           disabled={openAdd || openEdit}
                           className="font-sans"
                         >
@@ -482,7 +488,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                       </div>
                     ) : (
                       <>
-                        <Button
+                        {/* <Button
                           size="sm"
                           color="amber"
                           variant="filled"
@@ -491,12 +497,12 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                           disabled={openAdd || openEdit}
                         >
                           <PencilIcon className="w-4 h-4 mr-1" /> Edit
-                        </Button>
+                        </Button> */}
                         <Button
                           size="sm"
                           color="red"
                           variant="filled"
-                          onClick={() => handleDelete(row.id || row.part_number)}
+                          onClick={() => handleDelete(row.id || row.part_number, row)}
                           className="font-sans flex items-center gap-2"
                           disabled={openAdd || openEdit}
                         >

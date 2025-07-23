@@ -141,7 +141,7 @@ exports.update = async (req, res, next) => {
 exports.delete = async (req, res, next) => {
   const { id } = req.params;
   try {
-    const num = await Required_Docs.destroy({ where: { id } });
+    const num = await PIB.destroy({ where: { id } });
     if (num === 1) {
       res.json({ code: 200, message: "PIB deleted successfully" });
     } else {

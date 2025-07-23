@@ -116,9 +116,9 @@ exports.update = async (req, res, next) => {
 
 // delete by id
 exports.delete = async (req, res, next) => {
-  const { part_number } = req.params;
+  const { id } = req.params;
   try {
-    const num = await Barang.destroy({ where: { part_number } });
+    const num = await Barang.destroy({ where: { part_number: id } });
     if (num === 1) {
       res.json({ code: 200, message: "Barang deleted successfully" });
     } else {

@@ -4,6 +4,7 @@ import {
   InformationCircleIcon,
   ServerStackIcon,
   RectangleStackIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/solid";
 import { Home, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
@@ -47,7 +48,7 @@ export const routes = [
         ]} />,
       },
       {
-        icon: <TableCellsIcon {...icon} />,
+        icon: <ArrowDownTrayIcon {...icon} />,
         name: "Import Barang",
         path: "/import-barang",
         element: <ImportBarang />,
