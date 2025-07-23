@@ -528,10 +528,92 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           </tbody>
         </table>
       </Card>
-      <div className="flex justify-between items-center mt-4">
-        <Button disabled={page === 1 || openAdd || openEdit} onClick={() => setPage(page - 1)} variant="outlined" size="sm" className="font-sans">Previous</Button>
+      <div className="flex flex-wrap items-center justify-between mt-4 gap-2">
+        <div className="flex items-center gap-1">
+          <IconButton
+            size="sm"
+            color="gray"
+            variant="text"
+            onClick={() => setPage(page - 1)}
+            disabled={page === 1 || openAdd || openEdit}
+            className="font-sans"
+            aria-label="Previous page"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </IconButton>
+          {/* Page numbers logic */}
+          {(() => {
+            const pages = [];
+            const showPages = 1; // show 1 before/after current
+            let start = Math.max(2, page - showPages);
+            let end = Math.min(maxPage - 1, page + showPages);
+            // Always show first page
+            pages.push(
+              <Button key={1} size="sm" variant={page === 1 ? "filled" : "text"} color={page === 1 ? "blue" : "gray"} onClick={() => setPage(1)} className="font-sans min-w-[32px]">1</Button>
+            );
+            if (start > 2) pages.push(<span key="start-ellipsis" className="px-1">...</span>);
+            for (let i = start; i <= end; i++) {
+              if (i > 1 && i < maxPage) {
+                pages.push(
+                  <Button key={i} size="sm" variant={page === i ? "filled" : "text"} color={page === i ? "blue" : "gray"} onClick={() => setPage(i)} className="font-sans min-w-[32px]">{i}</Button>
+                );
+              }
+            }
+            if (end < maxPage - 1) pages.push(<span key="end-ellipsis" className="px-1">...</span>);
+            if (maxPage > 1) {
+              pages.push(
+                <Button key={maxPage} size="sm" variant={page === maxPage ? "filled" : "text"} color={page === maxPage ? "blue" : "gray"} onClick={() => setPage(maxPage)} className="font-sans min-w-[32px]">{maxPage}</Button>
+              );
+            }
+            return pages;
+          })()}
+          <IconButton
+            size="sm"
+            color="gray"
+            variant="text"
+            onClick={() => setPage(page + 1)}
+            disabled={page === maxPage || openAdd || openEdit || data.length < pageSize}
+            className="font-sans"
+            aria-label="Next page"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </IconButton>
+          <span className="ml-2 font-sans text-sm">Go to</span>
+          <input
+            type="number"
+            min={1}
+            max={maxPage}
+            value={page}
+            onChange={e => {
+              let val = parseInt(e.target.value, 10);
+              if (isNaN(val)) val = 1;
+              if (val < 1) val = 1;
+              if (val > maxPage) val = maxPage;
+              setPage(val);
+            }}
+            onBlur={e => {
+              let val = parseInt(e.target.value, 10);
+              if (isNaN(val) || val < 1) val = 1;
+              if (val > maxPage) val = maxPage;
+              setPage(val);
+            }}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                let val = parseInt(e.target.value, 10);
+                if (isNaN(val) || val < 1) val = 1;
+                if (val > maxPage) val = maxPage;
+                setPage(val);
+              }
+            }}
+            className="border rounded w-12 px-1 py-0.5 mx-1 text-center font-sans text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            disabled={openAdd || openEdit}
+          />
+        </div>
         <Typography variant="small" className="font-sans">Page {page} of {maxPage}</Typography>
-        <Button disabled={data.length < pageSize || openAdd || openEdit || page === maxPage} onClick={() => setPage(page + 1)} variant="outlined" size="sm" className="font-sans">Next</Button>
       </div>
       {/* Delete Confirm Dialog */}
       <Dialog open={deleteOpen} handler={cancelDelete} size="xs">
