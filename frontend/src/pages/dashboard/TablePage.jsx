@@ -197,7 +197,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
   return (
     <div className="p-8 font-sans">
       <div className="flex items-center justify-between mb-4">
-        <Typography variant="h4" className="text-gray-900 font-bold">
+        <Typography variant="h4" className="text-ciput-primary">
           {resourceLabel} Table
         </Typography>
         <div>

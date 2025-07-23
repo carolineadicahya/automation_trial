@@ -25,10 +25,10 @@ import { platformSettingsData, conversationsData, projectsData } from "@/data";
 export function Profile() {
   return (
     <>
-      <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover	bg-center">
-        <div className="absolute inset-0 h-full w-full bg-gray-900/75" />
+      <div className="relative mt-8 h-72 w-full overflow-hidden rounded-xl bg-[url('/img/background-image.png')] bg-cover bg-center">
+        <div className="absolute inset-0 h-full w-full bg-ciput-bg/90" />
       </div>
-      <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-blue-gray-100">
+      <Card className="mx-3 -mt-16 mb-6 lg:mx-4 border border-ciput-secondary bg-ciput-bg">
         <CardBody className="p-4">
           <div className="mb-10 flex items-center justify-between flex-wrap gap-6">
             <div className="flex items-center gap-6">
@@ -37,15 +37,15 @@ export function Profile() {
                 alt="bruce-mars"
                 size="xl"
                 variant="rounded"
-                className="rounded-lg shadow-lg shadow-blue-gray-500/40"
+                className="rounded-lg shadow-lg shadow-ciput-secondary/40"
               />
               <div>
-                <Typography variant="h5" color="blue-gray" className="mb-1">
+                <Typography variant="h5" color="ciput-primary" className="mb-1">
                   Richard Davis
                 </Typography>
                 <Typography
                   variant="small"
-                  className="font-normal text-blue-gray-600"
+                  className="font-normal text-ciput-secondary"
                 >
                   CEO / Co-Founder
                 </Typography>
@@ -72,13 +72,13 @@ export function Profile() {
           </div>
           <div className="gird-cols-1 mb-12 grid gap-12 px-4 lg:grid-cols-2 xl:grid-cols-3">
             <div>
-              <Typography variant="h6" color="blue-gray" className="mb-3">
+              <Typography variant="h6" color="ciput-primary" className="mb-3">
                 Platform Settings
               </Typography>
               <div className="flex flex-col gap-12">
                 {platformSettingsData.map(({ title, options }) => (
                   <div key={title}>
-                    <Typography className="mb-4 block text-xs font-semibold uppercase text-blue-gray-500">
+                    <Typography className="mb-4 block text-xs font-semibold uppercase text-ciput-secondary">
                       {title}
                     </Typography>
                     <div className="flex flex-col gap-6">
@@ -89,7 +89,7 @@ export function Profile() {
                           label={label}
                           defaultChecked={checked}
                           labelProps={{
-                            className: "text-sm font-normal text-blue-gray-500",
+                            className: "text-sm font-normal text-ciput-secondary",
                           }}
                         />
                       ))}
@@ -121,7 +121,7 @@ export function Profile() {
               }
             />
             <div>
-              <Typography variant="h6" color="blue-gray" className="mb-3">
+              <Typography variant="h6" color="ciput-primary" className="mb-3">
                 Platform Settings
               </Typography>
               <ul className="flex flex-col gap-6">

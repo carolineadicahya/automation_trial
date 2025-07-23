@@ -53,17 +53,17 @@ export const routes = [
           { key: "no_bl", label: "No BL" },
         ]} />,
       },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "Importir",
-        path: "/importir",
-        element: <TablePage resourceKey="importir" resourceLabel="Importir" columns={[
-          { key: "id", label: "ID" },
-          { key: "nitku", label: "NITKU" },
-          { key: "nib", label: "NIB" },
-          { key: "alamat", label: "Alamat" },
-        ]} />,
-      },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: "Importir",
+      //   path: "/importir",
+      //   element: <TablePage resourceKey="importir" resourceLabel="Importir" columns={[
+      //     { key: "id", label: "ID" },
+      //     { key: "nitku", label: "NITKU" },
+      //     { key: "nib", label: "NIB" },
+      //     { key: "alamat", label: "Alamat" },
+      //   ]} />,
+      // },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "Instansi",
@@ -73,16 +73,16 @@ export const routes = [
           { key: "nama_instansi", label: "Nama Instansi" },
         ]} />,
       },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "Penjual",
-        path: "/penjual",
-        element: <TablePage resourceKey="penjual" resourceLabel="Penjual" columns={[
-          { key: "id", label: "ID" },
-          { key: "nama", label: "Nama" },
-          { key: "alamat", label: "Alamat" },
-        ]} />,
-      },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: "Penjual",
+      //   path: "/penjual",
+      //   element: <TablePage resourceKey="penjual" resourceLabel="Penjual" columns={[
+      //     { key: "id", label: "ID" },
+      //     { key: "nama", label: "Nama" },
+      //     { key: "alamat", label: "Alamat" },
+      //   ]} />,
+      // },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "PIB",
@@ -109,49 +109,49 @@ export const routes = [
           { key: "tipe_dokumen", label: "Tipe Dokumen" },
         ]} />,
       },
-      {
-        icon: <TableCellsIcon {...icon} />,
-        name: "Sarana Pengangkutan",
-        path: "/sarana_pengangkutan",
-        element: <TablePage resourceKey="sarana_pengangkutan" resourceLabel="Sarana Pengangkutan" columns={[
-          { key: "id", label: "ID" },
-          { key: "nama", label: "Nama" },
-          { key: "nomor_identitas", label: "Nomor Identitas" },
-          { key: "bendera", label: "Bendera" },
-        ]} />,
-      },
+      // {
+      //   icon: <TableCellsIcon {...icon} />,
+      //   name: "Sarana Pengangkutan",
+      //   path: "/sarana_pengangkutan",
+      //   element: <TablePage resourceKey="sarana_pengangkutan" resourceLabel="Sarana Pengangkutan" columns={[
+      //     { key: "id", label: "ID" },
+      //     { key: "nama", label: "Nama" },
+      //     { key: "nomor_identitas", label: "Nomor Identitas" },
+      //     { key: "bendera", label: "Bendera" },
+      //   ]} />,
+      // },
       {
         icon: <TableCellsIcon {...icon} />,
         name: "Import Barang",
         path: "/import-barang",
         element: <ImportBarang />,
       },
-      {
-        icon: <InformationCircleIcon {...icon} />,
-        name: "notifications",
-        path: "/notifications",
-        element: <Notifications />,
-      },
+      // {
+      //   icon: <InformationCircleIcon {...icon} />,
+      //   name: "notifications",
+      //   path: "/notifications",
+      //   element: <Notifications />,
+      // },
     ],
   },
-  {
-    title: "auth pages",
-    layout: "auth",
-    pages: [
-      {
-        icon: <ServerStackIcon {...icon} />,
-        name: "sign in",
-        path: "/sign-in",
-        element: <SignIn />,
-      },
-      {
-        icon: <RectangleStackIcon {...icon} />,
-        name: "sign up",
-        path: "/sign-up",
-        element: <SignUp />,
-      },
-    ],
-  },
+  // {
+  //   title: "auth pages",
+  //   layout: "auth",
+  //   pages: [
+  //     {
+  //       icon: <ServerStackIcon {...icon} />,
+  //       name: "sign in",
+  //       path: "/sign-in",
+  //       element: <SignIn />,
+  //     },
+  //     {
+  //       icon: <RectangleStackIcon {...icon} />,
+  //       name: "sign up",
+  //       path: "/sign-up",
+  //       element: <SignUp />,
+  //     },
+  //   ],
+  // },
 ];
 
 export default routes;

@@ -9,13 +9,14 @@ import {
 } from "@material-tailwind/react";
 import { useMaterialTailwindController, setOpenSidenav } from "@/context";
 
+// routes nya tolong diperbarui karena masi ada importir, penjual, dan sarana pengangkutan
 export function Sidenav({ brandImg, brandName, routes }) {
   const [controller, dispatch] = useMaterialTailwindController();
   const { sidenavColor, sidenavType, openSidenav } = controller;
   const sidenavTypes = {
     dark: "bg-gradient-to-br from-gray-800 to-gray-900",
-    white: "bg-white shadow-sm",
-    transparent: "bg-transparent",
+    white: "bg-ciput-bg shadow-sm",
+    transparent: "bg-ciput-bg",
   };
 
   return (
@@ -30,7 +31,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
         <Link to="/" className="py-6 px-8 text-center">
           <Typography
             variant="h6"
-            color={sidenavType === "dark" ? "white" : "blue-gray"}
+            color={sidenavType === "dark" ? "white" : "ciput-primary"}
           >
             {brandName}
           </Typography>
@@ -53,7 +54,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
               <li className="mx-3.5 mt-4 mb-2">
                 <Typography
                   variant="small"
-                  color={sidenavType === "dark" ? "white" : "blue-gray"}
+                  color={sidenavType === "dark" ? "white" : "ciput-secondary"}
                   className="font-black uppercase opacity-75"
                 >
                   {title}
@@ -65,15 +66,13 @@ export function Sidenav({ brandImg, brandName, routes }) {
                 <NavLink to={`/${layout}${path}`}>
                   {({ isActive }) => (
                     <Button
-                      variant={isActive ? "gradient" : "text"}
+                      variant="text"
                       color={
-                        isActive
-                          ? sidenavColor
-                          : sidenavType === "dark"
+                        sidenavType === "dark"
                           ? "white"
                           : "blue-gray"
                       }
-                      className="flex items-center gap-4 px-4 capitalize"
+                      className={`flex items-center gap-4 px-4 capitalize ${isActive ? 'bg-ciput-primary text-ciput-bg hover:bg-ciput-active-hover hover:text-ciput-secondary' : ''}`}
                       fullWidth
                     >
                       {icon}
@@ -97,7 +96,7 @@ export function Sidenav({ brandImg, brandName, routes }) {
 
 Sidenav.defaultProps = {
   brandImg: "/img/logo-ct.png",
-  brandName: "Material Tailwind React",
+  brandName: "Automation Trial",
 };
 
 Sidenav.propTypes = {

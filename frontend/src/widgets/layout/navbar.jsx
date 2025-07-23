@@ -43,8 +43,8 @@ export function Navbar({ brandName, routes, action }) {
   );
 
   return (
-    <MTNavbar className="p-3">
-      <div className="container mx-auto flex items-center justify-between text-blue-gray-900">
+    <MTNavbar className="p-3 bg-ciput-bg">
+      <div className="container mx-auto flex items-center justify-between text-ciput-primary">
         <Link to="/">
           <Typography
             variant="small"
@@ -83,7 +83,7 @@ export function Navbar({ brandName, routes, action }) {
 }
 
 Navbar.defaultProps = {
-  brandName: "Material Tailwind React",
+  brandName: "Automation Trial",
   action: (
     <a
       href="https://www.creative-tim.com/product/material-tailwind-dashboard-react"

@@ -10,12 +10,12 @@ const API_BASE = "http://localhost:5000/api";
 const resources = [
   { key: "barang", label: "Barang" },
   { key: "detail_pib", label: "Detail PIB" },
-  { key: "importir", label: "Importir" },
+  // { key: "importir", label: "Importir" },
   { key: "instansi", label: "Instansi" },
-  { key: "penjual", label: "Penjual" },
+  // { key: "penjual", label: "Penjual" },
   { key: "pib", label: "PIB" },
   { key: "required_docs", label: "Required Docs" },
-  { key: "sarana_pengangkutan", label: "Sarana Pengangkutan" },
+  // { key: "sarana_pengangkutan", label: "Sarana Pengangkutan" },
 ];
 
 export function Home() {
@@ -59,26 +59,26 @@ export function Home() {
   }, []);
 
   return (
-    <div className="mt-12 min-h-screen bg-gray-50 font-sans" style={{ fontFamily: 'Poppins, sans-serif' }}>
+    <div className="mt-12 min-h-screen bg-ciput-bg font-sans">
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-2 xl:grid-cols-4">
         {loading ? (
-          <Typography variant="h6" className="text-gray-900">Loading...</Typography>
+          <Typography variant="h6" className="text-ciput-primary">Loading...</Typography>
         ) : error ? (
-          <Typography variant="h6" color="red">{error}</Typography>
+          <Typography variant="h6" style={{ color: '#e53935' }}>{error}</Typography>
         ) : (
           resources.map((res) => (
             <Card
               key={res.key}
-              className="p-6 flex flex-col items-center justify-center shadow-lg rounded-2xl bg-white text-gray-900 border hover:scale-105 transition-transform duration-200"
+              className="p-6 flex flex-col items-center justify-center shadow-lg rounded-2xl bg-white text-ciput-primary border hover:scale-105 transition-transform duration-200"
               style={{ fontFamily: 'Poppins, sans-serif', minHeight: 180 }}
             >
-              <Typography variant="h6" className="mb-2 text-gray-700 font-semibold tracking-wide uppercase">
+              <Typography variant="h6" className="mb-2 text-ciput-secondary font-semibold tracking-wide uppercase">
                 {res.label}
               </Typography>
-              <Typography variant="h1" className="mb-1 text-gray-900 font-bold text-5xl">
+              <Typography variant="h1" className="mb-1 text-ciput-primary font-bold text-5xl">
                 {counts[res.key] ?? 0}
               </Typography>
-              <Typography variant="small" className="text-gray-500 font-medium">
+              <Typography variant="small" className="text-ciput-secondary font-medium">
                 Total Data
               </Typography>
             </Card>

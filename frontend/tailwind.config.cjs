@@ -8,6 +8,12 @@ module.exports = withMT({
       fontFamily: {
         sans: ['Poppins', 'ui-sans-serif', 'system-ui'],
       },
+      colors: {
+        'ciput-bg': '#f6fffd',
+        'ciput-primary': '#0a1931',
+        'ciput-secondary': '#1a3d63',
+        'ciput-active-hover': '#b3cfe5',
+      },
     },
   },
   plugins: [],

@@ -16,9 +16,9 @@ module.exports = (sequelize, DataTypes) => {
     "pib",
     {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-      id_penjual: DataTypes.INTEGER,
-      id_importir: DataTypes.INTEGER,
-      id_sarana_pengangkutan: DataTypes.INTEGER,
+      // id_penjual: DataTypes.INTEGER,
+      // id_importir: DataTypes.INTEGER,
+      // id_sarana_pengangkutan: DataTypes.INTEGER,
       tipe_pengangkutan: DataTypes.ENUM("Laut", "Udara"),
       pelabuhan_pemuat: DataTypes.STRING,
       pelabuhan_tujuan: DataTypes.STRING,
@@ -32,28 +32,28 @@ module.exports = (sequelize, DataTypes) => {
 
   // Definisi relasi
   // Penjual
-  PIB.associate = (models) => {
-    PIB.belongsTo(models.penjual, {
-      foreignKey: "id_penjual",
-      targetKey: "id",
-      allowNull: false,
-      onDelete: "CASCADE",
-    });
+  // PIB.associate = (models) => {
+  //   PIB.belongsTo(models.penjual, {
+  //     foreignKey: "id_penjual",
+  //     targetKey: "id",
+  //     allowNull: false,
+  //     onDelete: "CASCADE",
+  //   });
 
-    PIB.belongsTo(models.importir, {
-      foreignKey: "id_importir",
-      targetKey: "id",
-      allowNull: false,
-      onDelete: "CASCADE",
-    });
+  //   PIB.belongsTo(models.importir, {
+  //     foreignKey: "id_importir",
+  //     targetKey: "id",
+  //     allowNull: false,
+  //     onDelete: "CASCADE",
+  //   });
 
-    PIB.belongsTo(models.sarana_pengangkutan, {
-      foreignKey: "id_sarana_pengangkutan",
-      targetKey: "id",
-      allowNull: false,
-      onDelete: "CASCADE",
-    });
-  };
+  //   PIB.belongsTo(models.sarana_pengangkutan, {
+  //     foreignKey: "id_sarana_pengangkutan",
+  //     targetKey: "id",
+  //     allowNull: false,
+  //     onDelete: "CASCADE",
+  //   });
+  // };
 
   return PIB;
 };
