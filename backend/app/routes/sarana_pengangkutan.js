@@ -5,6 +5,9 @@ const sarana_pengangkutanController = require("../controllers/sarana_pengangkuta
 // GET /api/sarana_pengangkutan
 router.get("/", sarana_pengangkutanController.findAll);
 
+// GET /api/sarana_pengangkutan/count
+router.get("/count", sarana_pengangkutanController.count);
+
 // GET /api/sarana_pengangkutan/:id
 router.get("/:id", sarana_pengangkutanController.findOne);
 

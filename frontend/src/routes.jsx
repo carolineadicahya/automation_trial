@@ -9,6 +9,7 @@ import { Home, Notifications } from "@/pages/dashboard";
 import { SignIn, SignUp } from "@/pages/auth";
 import React from "react";
 import TablePage from "@/pages/dashboard/TablePage";
+import ImportBarang from "@/pages/dashboard/ImportBarang";
 
 const icon = {
   className: "w-5 h-5 text-inherit",
@@ -118,6 +119,12 @@ export const routes = [
           { key: "nomor_identitas", label: "Nomor Identitas" },
           { key: "bendera", label: "Bendera" },
         ]} />,
+      },
+      {
+        icon: <TableCellsIcon {...icon} />,
+        name: "Import Barang",
+        path: "/import-barang",
+        element: <ImportBarang />,
       },
       {
         icon: <InformationCircleIcon {...icon} />,

@@ -5,6 +5,9 @@ const instansiController = require("../controllers/instansiController");
 // GET /api/instansi
 router.get("/", instansiController.findAll);
 
+// GET /api/instansi/count
+router.get("/count", instansiController.count);
+
 // GET /api/instansi/:id
 router.get("/:id", instansiController.findOne);
 

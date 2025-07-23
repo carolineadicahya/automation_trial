@@ -5,6 +5,9 @@ const required_docsController = require("../controllers/required_docsController"
 // GET /api/required_docs
 router.get("/", required_docsController.findAll);
 
+// GET /api/required_docs/count
+router.get("/count", required_docsController.count);
+
 // GET /api/required_docs/:id
 router.get("/:id", required_docsController.findOne);
 

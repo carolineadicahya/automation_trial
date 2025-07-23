@@ -1,5 +1,9 @@
 const db = require("../models");
 const Barang = db.barang;
+const csv = require("csv-parse");
+const fs = require("fs");
+const Required_Docs = db.required_docs;
+const Instansi = db.instansi;
 
 // get all
 exports.findAll = async (req, res, next) => {
@@ -106,6 +110,67 @@ exports.delete = async (req, res, next) => {
     } else {
       res.status(404).json({ code: 404, message: "Barang not found" });
     }
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.importBarang = async (req, res, next) => {
+  if (!req.file) {
+    return res.status(400).json({ code: 400, message: "No file uploaded" });
+  }
+  const results = [];
+  const errors = [];
+  const parser = fs.createReadStream(req.file.path).pipe(
+    csv.parse({ columns: true, trim: true, skip_empty_lines: true, relax_column_count: true })
+  );
+  for await (const row of parser) {
+    try {
+      // Defensive: skip if PN or HSCODE missing
+      if (!row["PN"] || !row["HSCODE"]) continue;
+      // 1. Instansi
+      let id_instansi = null;
+      const instanceName = row["INSTANCE"]?.trim();
+      if (instanceName && instanceName !== "-" && instanceName !== "") {
+        let instansi = await Instansi.findOne({ where: { nama_instansi: instanceName } });
+        if (!instansi) {
+          instansi = await Instansi.create({ nama_instansi: instanceName });
+        }
+        instansi = instansi.toJSON();
+        id_instansi = instansi["id"];
+      }
+      // 2. Barang
+      const barangPayload = {
+        part_number: row["PN"],
+        hs_code: row["HSCODE"],
+        deskripsi: row["DESC"],
+        pos_tarif: parseFloat((row["POS TARIF"] || '').replace('%', '')),
+        status_lartas: row["STATUS"].toUpperCase(),
+        satuan: "-",
+        id_instansi: id_instansi,
+      };
+      await Barang.create(barangPayload);
+      // 3. Required Docs
+      const docs = (row["REQUIRED DOCS"] || "").split("&").map((d) => d.trim()).filter(Boolean);
+      for (const doc of docs) {
+        if (doc !== "-") {
+          await Required_Docs.create({ id_barang: row["PN"], tipe_dokumen: doc });
+        }
+      }
+      results.push({ part_number: row["PN"], status: "success" });
+    } catch (err) {
+      errors.push({ row: row, error: err.message });
+    }
+  }
+  // Clean up uploaded file
+  fs.unlinkSync(req.file.path);
+  res.json({ code: 200, message: "Import completed", results, errors });
+};
+
+exports.count = async (req, res, next) => {
+  try {
+    const count = await Barang.count();
+    res.json({ count });
   } catch (err) {
     next(err);
   }

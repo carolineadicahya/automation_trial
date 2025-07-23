@@ -5,6 +5,9 @@ const pibController = require("../controllers/pibController");
 // GET /api/pib
 router.get("/", pibController.findAll);
 
+// GET /api/pib/count
+router.get("/count", pibController.count);
+
 // GET /api/pib/:id
 router.get("/:id", pibController.findOne);
 

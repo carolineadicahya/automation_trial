@@ -5,6 +5,9 @@ const importirController = require("../controllers/importirController");
 // GET /api/importir
 router.get("/", importirController.findAll);
 
+// GET /api/importir/count
+router.get("/count", importirController.count);
+
 // GET /api/importir/:id
 router.get("/:id", importirController.findOne);
 

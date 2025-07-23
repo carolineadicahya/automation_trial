@@ -18,9 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       deskripsi: DataTypes.TEXT,
       pos_tarif: DataTypes.DOUBLE,
       status_lartas: DataTypes.ENUM(
-        "Lartas Export",
-        "Lastas Import",
-        "Non-Lartas"
+        "LARTAS EXPORT",
+        "LARTAS IMPORT",
+        "NON-LARTAS"
       ),
       satuan: DataTypes.STRING,
     },

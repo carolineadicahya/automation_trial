@@ -46,6 +46,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const pageSize = 10;
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [form, setForm] = useState({});
@@ -59,16 +60,23 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
 
   const fetchData = () => {
     setLoading(true);
-    fetch(`${apiBase}/${resourceKey}?limit=10&page=${page}`)
+    fetch(`${apiBase}/${resourceKey}?limit=${pageSize}&page=${page}`)
       .then((r) => r.json())
       .then((res) => {
         setData(res.data || []);
-        setTotal(res.total || (res.data ? res.data.length : 0));
         setLoading(false);
       })
       .catch(() => {
         setError("Failed to fetch data");
         setLoading(false);
+      });
+  };
+
+  const fetchCount = () => {
+    fetch(`${apiBase}/${resourceKey}/count`)
+      .then((r) => r.json())
+      .then((res) => {
+        setTotal(res.count || 0);
       });
   };
 
@@ -78,6 +86,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
 
   useEffect(() => {
     fetchData();
+    fetchCount();
     // eslint-disable-next-line
   }, [page, resourceKey]);
 
@@ -183,13 +192,18 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     }
   }, [openAdd, openEdit, resourceKey, apiBase]);
 
+  const maxPage = Math.max(1, Math.ceil(total / pageSize));
+
   return (
     <div className="p-8 font-sans">
       <div className="flex items-center justify-between mb-4">
         <Typography variant="h4" className="text-gray-900 font-bold">
           {resourceLabel} Table
         </Typography>
-        <Button color="blue" onClick={handleOpenAdd} className="font-sans" disabled={openAdd || openEdit}>Add {resourceLabel}</Button>
+        <div>
+          <Typography variant="small" className="mr-4">Total: {total}</Typography>
+          <Button color="blue" onClick={handleOpenAdd} className="font-sans" disabled={openAdd || openEdit}>Add {resourceLabel}</Button>
+        </div>
       </div>
       {/* Inline Add/Edit Form */}
       {(openAdd || openEdit) && (
@@ -268,6 +282,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
         <table className="w-full min-w-[600px]">
           <thead>
             <tr className="bg-gray-200">
+              <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">No.</th>
               {columns.map((col) => (
                 <th key={col.key} className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">
                   {col.label}
@@ -278,14 +293,15 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={columns.length + 1} className="text-center py-8">Loading...</td></tr>
+              <tr><td colSpan={columns.length + 2} className="text-center py-8">Loading...</td></tr>
             ) : error ? (
-              <tr><td colSpan={columns.length + 1} className="text-center py-8 text-red-500">{error}</td></tr>
+              <tr><td colSpan={columns.length + 2} className="text-center py-8 text-red-500">{error}</td></tr>
             ) : data.length === 0 ? (
-              <tr><td colSpan={columns.length + 1} className="text-center py-8">No data for this table</td></tr>
+              <tr><td colSpan={columns.length + 2} className="text-center py-8">No data for this table</td></tr>
             ) : (
               data.map((row, idx) => (
                 <tr key={row.id || row.part_number || idx} className="border-b">
+                  <td className="px-4 py-2 text-gray-900">{(page - 1) * pageSize + idx + 1}</td>
                   {columns.map((col) => (
                     <td key={col.key} className="px-4 py-2 text-gray-900">{row[col.key]}</td>
                   ))}
@@ -319,8 +335,8 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
       </Card>
       <div className="flex justify-between items-center mt-4">
         <Button disabled={page === 1 || openAdd || openEdit} onClick={() => setPage(page - 1)} variant="outlined" size="sm" className="font-sans">Previous</Button>
-        <Typography variant="small" className="font-sans">Page {page}</Typography>
-        <Button disabled={data.length < 10 || openAdd || openEdit} onClick={() => setPage(page + 1)} variant="outlined" size="sm" className="font-sans">Next</Button>
+        <Typography variant="small" className="font-sans">Page {page} of {maxPage}</Typography>
+        <Button disabled={data.length < pageSize || openAdd || openEdit || page === maxPage} onClick={() => setPage(page + 1)} variant="outlined" size="sm" className="font-sans">Next</Button>
       </div>
       {/* Delete Confirm Dialog */}
       <Dialog open={deleteOpen} handler={cancelDelete} size="xs">

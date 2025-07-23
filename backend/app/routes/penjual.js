@@ -5,6 +5,9 @@ const penjualController = require("../controllers/penjualController");
 // GET /api/penjual
 router.get("/", penjualController.findAll);
 
+// GET /api/penjual/count
+router.get("/count", penjualController.count);
+
 // GET /api/penjual/:id
 router.get("/:id", penjualController.findOne);
 

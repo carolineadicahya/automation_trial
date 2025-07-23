@@ -149,3 +149,12 @@ exports.delete = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.count = async (req, res, next) => {
+  try {
+    const count = await PIB.count();
+    res.json({ count });
+  } catch (err) {
+    next(err);
+  }
+};

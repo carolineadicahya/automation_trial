@@ -5,6 +5,9 @@ const detail_pibController = require("../controllers/detail_pibController");
 // GET /api/detail_pib
 router.get("/", detail_pibController.findAll);
 
+// GET /api/detail_pib/count
+router.get("/count", detail_pibController.count);
+
 // GET /api/detail_pib/:id
 router.get("/:id", detail_pibController.findOne);
 
