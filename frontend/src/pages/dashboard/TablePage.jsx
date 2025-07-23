@@ -15,7 +15,7 @@ import {
 } from "@material-tailwind/react";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/solid";
 
-const defaultApiBase = "http://localhost:5000/api";
+const apiBase = import.meta.env.VITE_API_BASE || process.env.REACT_APP_API_BASE || "http://localhost:5000/api";
 
 // Foreign key mapping: resourceKey -> { columnKey: { ref: resourceKey, label: columnNameForLabel } }
 const foreignKeyMap = {
@@ -41,7 +41,7 @@ const foreignKeyMap = {
   sarana_pengangkutan: {},
 };
 
-export default function TablePage({ resourceKey, resourceLabel, columns, apiBase = defaultApiBase }) {
+export default function TablePage({ resourceKey, resourceLabel, columns }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

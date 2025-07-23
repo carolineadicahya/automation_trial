@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import { Button, Typography, Card, CardBody, Progress, Input } from "@material-tailwind/react";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = import.meta.env.VITE_API_BASE || process.env.REACT_APP_API_BASE || "http://localhost:5000/api";
 
 export default function ImportBarang() {
   const [file, setFile] = useState(null);
