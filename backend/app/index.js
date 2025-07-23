@@ -18,12 +18,14 @@ const detailPibRoutes = require('./routes/detail_pib');
 const instansiRoutes = require('./routes/instansi');
 const pibRoutes = require('./routes/pib');
 const requiredDocsRoutes = require('./routes/required_docs');
+const docsTypeRoutes = require('./routes/docs_type');
 
 app.use('/api/barang', barangRoutes);
 app.use('/api/detail_pib', detailPibRoutes);
 app.use('/api/instansi', instansiRoutes);
 app.use('/api/pib', pibRoutes);
 app.use('/api/required_docs', requiredDocsRoutes);
+app.use('/api/docs_type', docsTypeRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
