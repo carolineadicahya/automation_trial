@@ -39,6 +39,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       onDelete: "CASCADE",
     });
+    // Add hasMany association to required_docs
+    Barang.hasMany(models.required_docs, {
+      foreignKey: "id_barang",
+      sourceKey: "part_number",
+      onDelete: "CASCADE",
+    });
   };
 
   return Barang;

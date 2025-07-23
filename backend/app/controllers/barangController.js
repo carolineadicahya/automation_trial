@@ -11,7 +11,14 @@ exports.findAll = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   try {
-    const barangs = await Barang.findAll({ offset, limit, include: [{ model: db.instansi }] });
+    const barangs = await Barang.findAll({
+      offset,
+      limit,
+      include: [
+        { model: db.instansi },
+        { model: db.required_docs, include: [{ model: db.docs_type }] }
+      ]
+    });
     if (!barangs || barangs.length === 0) {
       return res.status(404).json({ code: 404, message: "No barang found" });
     }
@@ -28,7 +35,12 @@ exports.findAll = async (req, res, next) => {
 // get by id
 exports.findOne = async (req, res, next) => {
   try {
-    const barang = await Barang.findByPk(req.params.id, { include: [{ model: db.instansi }] });
+    const barang = await Barang.findByPk(req.params.id, {
+      include: [
+        { model: db.instansi },
+        { model: db.required_docs, include: [{ model: db.docs_type }] }
+      ]
+    });
     if (!barang) {
       return res.status(404).json({ code: 404, message: "Barang not found" });
     }

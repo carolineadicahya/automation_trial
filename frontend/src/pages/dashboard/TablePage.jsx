@@ -224,9 +224,27 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     return row[col.key];
   }
 
-  // Filter columns to remove 'satuan' for barang
+  // Helper to get combined docs for barang
+  function getCombinedDocs(row) {
+    if (!row.required_docs || !Array.isArray(row.required_docs)) return '-';
+    // Each required_doc has docs_type with nama
+    const docNames = row.required_docs
+      .map(doc => doc.docs_type && doc.docs_type.nama)
+      .filter(Boolean);
+    return docNames.length > 0 ? docNames.join(' & ') : '-';
+  }
+
+  // For barang, define the desired column order
+  const barangColumnOrder = [
+    'part_number',
+    'deskripsi',
+    'hs_code',
+    'pos_tarif',
+    'status_lartas',
+  ];
+  // Filter and order columns for barang
   const filteredColumns = resourceKey === 'barang'
-    ? columns.filter(col => col.key !== 'satuan')
+    ? barangColumnOrder.map(key => columns.find(col => col.key === key)).filter(Boolean)
     : columns;
 
   return (
@@ -318,21 +336,13 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           <thead>
             <tr className="bg-gray-200">
               <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">No.</th>
-              {filteredColumns.filter(col => {
-                // Hide foreign key id columns if we have a display value for them
-                if (resourceKey === 'barang' && col.key === 'id_instansi') return false;
-                if (resourceKey === 'required_docs' && col.key === 'id_docs_type') return false;
-                // For required_docs, show id_barang as part_number
-                if (resourceKey === 'required_docs' && col.key === 'id_barang') return false;
-                // For detail_pib, show id_barang and id_pib as their references
-                if (resourceKey === 'detail_pib' && (col.key === 'id_barang' || col.key === 'id_pib')) return false;
-                return true;
-              }).map((col) => (
+              {filteredColumns.map((col) => (
                 <th key={col.key} className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">
                   {col.label}
                 </th>
               ))}
-              {/* Add custom headers for foreign keys */}
+              {/* Add custom headers for foreign keys in the correct order */}
+              {resourceKey === 'barang' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">DOCS</th>}
               {resourceKey === 'barang' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Instansi</th>}
               {resourceKey === 'required_docs' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Barang</th>}
               {resourceKey === 'required_docs' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Docs Type</th>}
@@ -343,25 +353,20 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8">Loading...</td></tr>
+              <tr><td colSpan={filteredColumns.length + 3} className="text-center py-8">Loading...</td></tr>
             ) : error ? (
-              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8 text-red-500">{error}</td></tr>
+              <tr><td colSpan={filteredColumns.length + 3} className="text-center py-8 text-red-500">{error}</td></tr>
             ) : data.length === 0 ? (
-              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8">No data for this table</td></tr>
+              <tr><td colSpan={filteredColumns.length + 3} className="text-center py-8">No data for this table</td></tr>
             ) : (
               data.map((row, idx) => (
                 <tr key={row.id || row.part_number || idx} className="border-b">
                   <td className="px-4 py-2 text-gray-900">{(page - 1) * pageSize + idx + 1}</td>
-                  {filteredColumns.filter(col => {
-                    if (resourceKey === 'barang' && col.key === 'id_instansi') return false;
-                    if (resourceKey === 'required_docs' && col.key === 'id_docs_type') return false;
-                    if (resourceKey === 'required_docs' && col.key === 'id_barang') return false;
-                    if (resourceKey === 'detail_pib' && (col.key === 'id_barang' || col.key === 'id_pib')) return false;
-                    return true;
-                  }).map((col) => (
+                  {filteredColumns.map((col) => (
                     <td key={col.key} className="px-4 py-2 text-gray-900">{getDisplayValue(row, col, resourceKey, filteredColumns)}</td>
                   ))}
-                  {/* Custom display for foreign keys */}
+                  {/* Custom display for foreign keys in the correct order */}
+                  {resourceKey === 'barang' && <td className="px-4 py-2 text-gray-900">{getCombinedDocs(row)}</td>}
                   {resourceKey === 'barang' && <td className="px-4 py-2 text-gray-900">{row.instansi ? row.instansi.nama_instansi : '-'}</td>}
                   {resourceKey === 'required_docs' && <td className="px-4 py-2 text-gray-900">{row.barang ? row.barang.part_number : '-'}</td>}
                   {resourceKey === 'required_docs' && <td className="px-4 py-2 text-gray-900">{row.docs_type ? row.docs_type.nama : '-'}</td>}
