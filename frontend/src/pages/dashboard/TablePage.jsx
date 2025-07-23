@@ -57,6 +57,28 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
   // Delete modal state
   const [deleteId, setDeleteId] = useState(null);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  // PIB Detail Dialog state
+  const [viewPibId, setViewPibId] = useState(null);
+  const [pibDetails, setPibDetails] = useState([]);
+  const [pibDetailsLoading, setPibDetailsLoading] = useState(true);
+  const [pibDetailsError, setPibDetailsError] = useState(null);
+
+  function handleViewPibDetails(pibId) {
+    setViewPibId(pibId);
+    setPibDetailsLoading(true);
+    setPibDetailsError(null);
+    setPibDetails([]);
+    fetch(`${apiBase}/detail_pib?id_pib=${pibId}&limit=10000`)
+      .then(r => r.json())
+      .then(res => {
+        setPibDetails(res.data || []);
+        setPibDetailsLoading(false);
+      })
+      .catch(err => {
+        setPibDetailsError("Failed to fetch PIB details");
+        setPibDetailsLoading(false);
+      });
+  }
 
   const fetchData = () => {
     setLoading(true);
@@ -247,6 +269,13 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     ? barangColumnOrder.map(key => columns.find(col => col.key === key)).filter(Boolean)
     : columns;
 
+  const handleClosePibDialog = () => {
+    setViewPibId(null);
+    setPibDetailsLoading(true);
+    setPibDetailsError(null);
+    setPibDetails([]);
+  };
+
   return (
     <div className="p-8 font-sans">
       <div className="flex items-center justify-between mb-4">
@@ -393,6 +422,17 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                     >
                       <TrashIcon className="w-4 h-4 mr-1" /> Delete
                     </Button>
+                    {resourceKey === 'pib' && (
+                      <Button
+                        size="sm"
+                        color="blue"
+                        variant="outlined"
+                        onClick={() => handleViewPibDetails(row.id)}
+                        className="ml-2 font-sans"
+                      >
+                        View
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))
@@ -414,6 +454,57 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
         <DialogFooter>
           <Button variant="text" color="gray" onClick={cancelDelete} className="mr-2 font-sans">Cancel</Button>
           <Button variant="gradient" color="red" onClick={confirmDelete} className="font-sans">Delete</Button>
+        </DialogFooter>
+      </Dialog>
+      {/* PIB Detail Dialog - always render, only open when viewPibId is set */}
+      <Dialog open={!!viewPibId} handler={handleClosePibDialog} size="xl">
+        <DialogHeader>PIB Details (ID: {viewPibId})</DialogHeader>
+        <DialogBody style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+          {pibDetailsLoading ? (
+            <Typography>Loading...</Typography>
+          ) : pibDetailsError ? (
+            <Typography color="red">{pibDetailsError}</Typography>
+          ) : pibDetails.length === 0 ? (
+            <Typography>No details found for this PIB.</Typography>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-[1000px] border rounded-xl bg-white">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="px-3 py-2">Part Number</th>
+                    <th className="px-3 py-2">Deskripsi</th>
+                    <th className="px-3 py-2">Jumlah</th>
+                    <th className="px-3 py-2">HS Code</th>
+                    <th className="px-3 py-2">Pos Tarif</th>
+                    <th className="px-3 py-2">Status</th>
+                    <th className="px-3 py-2">No Invoice</th>
+                    <th className="px-3 py-2">No BL</th>
+                    <th className="px-3 py-2">Required Docs</th>
+                    <th className="px-3 py-2">Instansi</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pibDetails.map((d, idx) => (
+                    <tr key={d.id || idx} className="even:bg-gray-50">
+                      <td className="px-3 py-2 font-mono">{d.barang?.part_number || '-'}</td>
+                      <td className="px-3 py-2">{d.barang?.deskripsi || '-'}</td>
+                      <td className="px-3 py-2">{d.jumlah}</td>
+                      <td className="px-3 py-2">{d.barang?.hs_code || '-'}</td>
+                      <td className="px-3 py-2">{d.barang?.pos_tarif ? d.barang.pos_tarif + '%' : '-'}</td>
+                      <td className="px-3 py-2">{d.barang?.status_lartas || '-'}</td>
+                      <td className="px-3 py-2">{d.no_invoice}</td>
+                      <td className="px-3 py-2">{d.no_bl}</td>
+                      <td className="px-3 py-2">{d.barang?.required_docs && Array.isArray(d.barang.required_docs) ? d.barang.required_docs.map(doc => doc.docs_type?.nama).filter(Boolean).join(' & ') : '-'}</td>
+                      <td className="px-3 py-2">{d.barang?.instansi ? d.barang.instansi.nama_instansi : '-'}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </DialogBody>
+        <DialogFooter>
+          <Button variant="text" color="gray" onClick={handleClosePibDialog} className="font-sans">Close</Button>
         </DialogFooter>
       </Dialog>
     </div>

@@ -6,11 +6,26 @@ exports.findAll = async (req, res, next) => {
   const limit = parseInt(req.query.limit) || 10;
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
+  const where = {};
+  if (req.query.id_pib) {
+    where.id_pib = req.query.id_pib;
+  }
   try {
-    const detail_pibs = await Detail_PIB.findAll({ offset, limit, include: [db.barang, db.pib] });
-    if (!detail_pibs || detail_pibs.length === 0) {
-      return res.status(404).json({ code: 404, message: "No Detail PIB found" });
-    }
+    const detail_pibs = await Detail_PIB.findAll({
+      where,
+      offset,
+      limit,
+      include: [
+        {
+          model: db.barang,
+          include: [
+            { model: db.required_docs, include: [{ model: db.docs_type }] },
+            { model: db.instansi }
+          ]
+        },
+        db.pib
+      ]
+    });
     res.json({
       code: 200,
       message: "Detail PIB retrieved successfully",
