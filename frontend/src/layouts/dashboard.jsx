@@ -43,9 +43,9 @@ export function Dashboard() {
               ))
           )}
         </Routes>
-        <div className="text-ciput-primary">
+        {/* <div className="text-ciput-primary">
           <Footer />
-        </div>
+        </div> */}
       </div>
     </div>
   );

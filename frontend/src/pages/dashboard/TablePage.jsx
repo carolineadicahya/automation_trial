@@ -194,6 +194,41 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
 
   const maxPage = Math.max(1, Math.ceil(total / pageSize));
 
+  // Helper to get display value for a cell
+  function getDisplayValue(row, col, resourceKey, columns) {
+    // Barang: show instansi.nama_instansi for id_instansi
+    if (resourceKey === 'barang' && col.key === 'id_instansi' && row.instansi) {
+      return row.instansi.nama_instansi;
+    }
+    // Required Docs: show docs_type.nama for id_docs_type
+    if (resourceKey === 'required_docs' && col.key === 'id_docs_type' && row.docs_type) {
+      return row.docs_type.nama;
+    }
+    // Required Docs: show barang.part_number for id_barang
+    if (resourceKey === 'required_docs' && col.key === 'id_barang' && row.barang) {
+      return row.barang.part_number;
+    }
+    // Detail PIB: show barang.part_number for id_barang
+    if (resourceKey === 'detail_pib' && col.key === 'id_barang' && row.barang) {
+      return row.barang.part_number;
+    }
+    // Detail PIB: show pib.id for id_pib
+    if (resourceKey === 'detail_pib' && col.key === 'id_pib' && row.pib) {
+      return row.pib.id;
+    }
+    // Show pos_tarif with %
+    if (col.key === 'pos_tarif' && row[col.key] !== undefined && row[col.key] !== null) {
+      return row[col.key] + '%';
+    }
+    // Default: show the value
+    return row[col.key];
+  }
+
+  // Filter columns to remove 'satuan' for barang
+  const filteredColumns = resourceKey === 'barang'
+    ? columns.filter(col => col.key !== 'satuan')
+    : columns;
+
   return (
     <div className="p-8 font-sans">
       <div className="flex items-center justify-between mb-4">
@@ -283,28 +318,55 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           <thead>
             <tr className="bg-gray-200">
               <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">No.</th>
-              {columns.map((col) => (
+              {filteredColumns.filter(col => {
+                // Hide foreign key id columns if we have a display value for them
+                if (resourceKey === 'barang' && col.key === 'id_instansi') return false;
+                if (resourceKey === 'required_docs' && col.key === 'id_docs_type') return false;
+                // For required_docs, show id_barang as part_number
+                if (resourceKey === 'required_docs' && col.key === 'id_barang') return false;
+                // For detail_pib, show id_barang and id_pib as their references
+                if (resourceKey === 'detail_pib' && (col.key === 'id_barang' || col.key === 'id_pib')) return false;
+                return true;
+              }).map((col) => (
                 <th key={col.key} className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">
                   {col.label}
                 </th>
               ))}
+              {/* Add custom headers for foreign keys */}
+              {resourceKey === 'barang' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Instansi</th>}
+              {resourceKey === 'required_docs' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Barang</th>}
+              {resourceKey === 'required_docs' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Docs Type</th>}
+              {resourceKey === 'detail_pib' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Barang</th>}
+              {resourceKey === 'detail_pib' && <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">PIB</th>}
               <th className="px-4 py-2 text-left text-gray-800 font-semibold uppercase text-xs">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
-              <tr><td colSpan={columns.length + 2} className="text-center py-8">Loading...</td></tr>
+              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8">Loading...</td></tr>
             ) : error ? (
-              <tr><td colSpan={columns.length + 2} className="text-center py-8 text-red-500">{error}</td></tr>
+              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8 text-red-500">{error}</td></tr>
             ) : data.length === 0 ? (
-              <tr><td colSpan={columns.length + 2} className="text-center py-8">No data for this table</td></tr>
+              <tr><td colSpan={filteredColumns.length + 2} className="text-center py-8">No data for this table</td></tr>
             ) : (
               data.map((row, idx) => (
                 <tr key={row.id || row.part_number || idx} className="border-b">
                   <td className="px-4 py-2 text-gray-900">{(page - 1) * pageSize + idx + 1}</td>
-                  {columns.map((col) => (
-                    <td key={col.key} className="px-4 py-2 text-gray-900">{row[col.key]}</td>
+                  {filteredColumns.filter(col => {
+                    if (resourceKey === 'barang' && col.key === 'id_instansi') return false;
+                    if (resourceKey === 'required_docs' && col.key === 'id_docs_type') return false;
+                    if (resourceKey === 'required_docs' && col.key === 'id_barang') return false;
+                    if (resourceKey === 'detail_pib' && (col.key === 'id_barang' || col.key === 'id_pib')) return false;
+                    return true;
+                  }).map((col) => (
+                    <td key={col.key} className="px-4 py-2 text-gray-900">{getDisplayValue(row, col, resourceKey, filteredColumns)}</td>
                   ))}
+                  {/* Custom display for foreign keys */}
+                  {resourceKey === 'barang' && <td className="px-4 py-2 text-gray-900">{row.instansi ? row.instansi.nama_instansi : '-'}</td>}
+                  {resourceKey === 'required_docs' && <td className="px-4 py-2 text-gray-900">{row.barang ? row.barang.part_number : '-'}</td>}
+                  {resourceKey === 'required_docs' && <td className="px-4 py-2 text-gray-900">{row.docs_type ? row.docs_type.nama : '-'}</td>}
+                  {resourceKey === 'detail_pib' && <td className="px-4 py-2 text-gray-900">{row.barang ? row.barang.part_number : '-'}</td>}
+                  {resourceKey === 'detail_pib' && <td className="px-4 py-2 text-gray-900">{row.pib ? row.pib.id : '-'}</td>}
                   <td className="px-4 py-2">
                     <Button
                       size="sm"
