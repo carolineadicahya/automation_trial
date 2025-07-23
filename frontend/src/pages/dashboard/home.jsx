@@ -2,20 +2,12 @@ import React, { useEffect, useState } from "react";
 import {
   Typography,
   Card,
-  CardHeader,
-  CardBody,
 } from "@material-tailwind/react";
 
 const API_BASE = "http://localhost:5000/api";
 const resources = [
   { key: "barang", label: "Barang" },
-  { key: "detail_pib", label: "Detail PIB" },
-  // { key: "importir", label: "Importir" },
-  { key: "instansi", label: "Instansi" },
-  // { key: "penjual", label: "Penjual" },
   { key: "pib", label: "PIB" },
-  { key: "required_docs", label: "Required Docs" },
-  // { key: "sarana_pengangkutan", label: "Sarana Pengangkutan" },
 ];
 
 export function Home() {
@@ -28,31 +20,21 @@ export function Home() {
     setError(null);
     Promise.all(
       resources.map((res) =>
-        fetch(`${API_BASE}/${res.key}?limit=1`)
+        fetch(`${API_BASE}/${res.key}/count`)
           .then((r) => r.json())
-          .then((data) => ({
-            key: res.key,
-            count: Array.isArray(data.data) ? data.data.length + (data.total || 0) - 1 : (data.data ? 1 : 0),
-            fallback: data,
-          }))
-          .catch(() => ({ key: res.key, count: 0, fallback: null }))
+          .then((data) => ({ key: res.key, count: data.count || 0 }))
+          .catch(() => ({ key: res.key, count: 0 }))
       )
     )
       .then((results) => {
         const countsObj = {};
-        results.forEach((r, idx) => {
-          let count = 0;
-          if (r.fallback && typeof r.fallback.total === "number") {
-            count = r.fallback.total;
-          } else if (r.fallback && Array.isArray(r.fallback.data)) {
-            count = r.fallback.data.length;
-          }
-          countsObj[resources[idx].key] = count;
+        results.forEach((r) => {
+          countsObj[r.key] = r.count;
         });
         setCounts(countsObj);
         setLoading(false);
       })
-      .catch((err) => {
+      .catch(() => {
         setError("Failed to fetch data");
         setLoading(false);
       });
