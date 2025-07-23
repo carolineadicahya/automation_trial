@@ -293,7 +293,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     if (!tableRef.current) return;
     const printContents = tableRef.current.innerHTML;
     const printWindow = window.open('', '', 'height=600,width=1000');
-    printWindow.document.write('<html><head><title>PIB Detail Table</title>');
+    printWindow.document.write('<html><head><title>Tabel PIB Detail</title>');
     printWindow.document.write('<style>table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; } th { background: #f3f3f3; }</style>');
     printWindow.document.write('</head><body>');
     printWindow.document.write(printContents);
@@ -336,7 +336,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     <div className="p-8 font-sans">
       <div className="flex items-center justify-between mb-4">
         <Typography variant="h4" className="text-ciput-primary">
-          {resourceLabel} Table
+          Tabel {resourceLabel} 
         </Typography>
         <div>
           <Typography variant="small" className="mr-4">Total: {total}</Typography>
