@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import * as XLSX from "xlsx";
 import {
   Card,
   Typography,
@@ -62,6 +63,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
   const [pibDetails, setPibDetails] = useState([]);
   const [pibDetailsLoading, setPibDetailsLoading] = useState(true);
   const [pibDetailsError, setPibDetailsError] = useState(null);
+  const tableRef = useRef(null);
 
   function handleViewPibDetails(pibId) {
     setViewPibId(pibId);
@@ -238,6 +240,11 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     if (resourceKey === 'detail_pib' && col.key === 'id_pib' && row.pib) {
       return row.pib.id;
     }
+    // PIB: format createdAt
+    if (resourceKey === 'pib' && col.key === 'createdAt' && row.createdAt) {
+      const date = new Date(row.createdAt);
+      return date.toLocaleString('en-GB', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+    }
     // Show pos_tarif with %
     if (col.key === 'pos_tarif' && row[col.key] !== undefined && row[col.key] !== null) {
       return row[col.key] + '%';
@@ -275,6 +282,49 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
     setPibDetailsError(null);
     setPibDetails([]);
   };
+
+  function handlePrintTable() {
+    if (!tableRef.current) return;
+    const printContents = tableRef.current.innerHTML;
+    const printWindow = window.open('', '', 'height=600,width=1000');
+    printWindow.document.write('<html><head><title>PIB Detail Table</title>');
+    printWindow.document.write('<style>table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid #ccc; padding: 8px; } th { background: #f3f3f3; }</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write(printContents);
+    printWindow.document.write('</body></html>');
+    printWindow.document.close();
+    printWindow.focus();
+    printWindow.print();
+    printWindow.close();
+  }
+
+  function handleDownloadExcel() {
+    if (!pibDetails || pibDetails.length === 0) return;
+    // Define headers and build data as array of objects
+    const headers = [
+      'Part Number', 'Deskripsi', 'Jumlah', 'HS Code', 'Pos Tarif', 'Status', 'No Invoice', 'No BL', 'Required Docs', 'Instansi'
+    ];
+    const data = pibDetails.map(d => ({
+      'Part Number': d.barang?.part_number || '-',
+      'Deskripsi': d.barang?.deskripsi || '-',
+      'Jumlah': d.jumlah || '-',
+      'HS Code': d.barang?.hs_code || '-',
+      'Pos Tarif': d.barang?.pos_tarif ? d.barang.pos_tarif + '%' : '-',
+      'Status': d.barang?.status_lartas || '-',
+      'No Invoice': d.no_invoice || '-',
+      'No BL': d.no_bl || '-',
+      'Required Docs': (d.barang?.required_docs && Array.isArray(d.barang.required_docs) && d.barang.required_docs.length > 0
+        ? d.barang.required_docs.map(doc => doc.docs_type?.nama).filter(Boolean).join(' & ')
+        : '-'),
+      'Instansi': d.barang?.instansi ? d.barang.instansi.nama_instansi : '-'
+    }));
+    // Create worksheet and workbook
+    const ws = XLSX.utils.json_to_sheet(data, { header: headers });
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "PIB Detail");
+    // Download as .xlsx
+    XLSX.writeFile(wb, `PIB_Detail_${viewPibId}.xlsx`);
+  }
 
   return (
     <div className="p-8 font-sans">
@@ -402,36 +452,68 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                   {resourceKey === 'detail_pib' && <td className="px-4 py-2 text-gray-900">{row.barang ? row.barang.part_number : '-'}</td>}
                   {resourceKey === 'detail_pib' && <td className="px-4 py-2 text-gray-900">{row.pib ? row.pib.id : '-'}</td>}
                   <td className="px-4 py-2">
-                    <Button
-                      size="sm"
-                      color="amber"
-                      variant="filled"
-                      onClick={() => handleOpenEdit(row)}
-                      className="mr-2 font-sans flex items-center gap-2"
-                      disabled={openAdd || openEdit}
-                    >
-                      <PencilIcon className="w-4 h-4 mr-1" /> Edit
-                    </Button>
-                    <Button
-                      size="sm"
-                      color="red"
-                      variant="filled"
-                      onClick={() => handleDelete(row.id || row.part_number)}
-                      className="font-sans flex items-center gap-2"
-                      disabled={openAdd || openEdit}
-                    >
-                      <TrashIcon className="w-4 h-4 mr-1" /> Delete
-                    </Button>
-                    {resourceKey === 'pib' && (
-                      <Button
-                        size="sm"
-                        color="blue"
-                        variant="outlined"
-                        onClick={() => handleViewPibDetails(row.id)}
-                        className="ml-2 font-sans"
-                      >
-                        View
-                      </Button>
+                    {(resourceKey === 'pib' || resourceKey === 'barang') ? (
+                      <div className="flex flex-row gap-2">
+                        <IconButton
+                          color="amber"
+                          onClick={() => handleOpenEdit(row)}
+                          disabled={openAdd || openEdit}
+                          className="font-sans"
+                        >
+                          <PencilIcon className="w-5 h-5" />
+                        </IconButton>
+                        <IconButton
+                          color="red"
+                          onClick={() => handleDelete(row.id || row.part_number)}
+                          disabled={openAdd || openEdit}
+                          className="font-sans"
+                        >
+                          <TrashIcon className="w-5 h-5" />
+                        </IconButton>
+                        {resourceKey === 'pib' && (
+                          <IconButton
+                            color="blue"
+                            onClick={() => handleViewPibDetails(row.id)}
+                            className="font-sans"
+                          >
+                            View
+                          </IconButton>
+                        )}
+                      </div>
+                    ) : (
+                      <>
+                        <Button
+                          size="sm"
+                          color="amber"
+                          variant="filled"
+                          onClick={() => handleOpenEdit(row)}
+                          className="mr-2 font-sans flex items-center gap-2"
+                          disabled={openAdd || openEdit}
+                        >
+                          <PencilIcon className="w-4 h-4 mr-1" /> Edit
+                        </Button>
+                        <Button
+                          size="sm"
+                          color="red"
+                          variant="filled"
+                          onClick={() => handleDelete(row.id || row.part_number)}
+                          className="font-sans flex items-center gap-2"
+                          disabled={openAdd || openEdit}
+                        >
+                          <TrashIcon className="w-4 h-4 mr-1" /> Delete
+                        </Button>
+                        {resourceKey === 'pib' && (
+                          <Button
+                            size="sm"
+                            color="blue"
+                            variant="outlined"
+                            onClick={() => handleViewPibDetails(row.id)}
+                            className="ml-2 font-sans"
+                          >
+                            View
+                          </Button>
+                        )}
+                      </>
                     )}
                   </td>
                 </tr>
@@ -467,10 +549,11 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           ) : pibDetails.length === 0 ? (
             <Typography>No details found for this PIB.</Typography>
           ) : (
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto" ref={tableRef} id="pib-detail-table-print-area">
               <table className="w-full min-w-[1000px] border rounded-xl bg-white">
                 <thead>
                   <tr className="bg-gray-100">
+                    <th className="px-3 py-2">No.</th>
                     <th className="px-3 py-2">Part Number</th>
                     <th className="px-3 py-2">Deskripsi</th>
                     <th className="px-3 py-2">Jumlah</th>
@@ -486,6 +569,7 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                 <tbody>
                   {pibDetails.map((d, idx) => (
                     <tr key={d.id || idx} className="even:bg-gray-50">
+                      <td className="px-3 py-2">{idx + 1}</td>
                       <td className="px-3 py-2 font-mono">{d.barang?.part_number || '-'}</td>
                       <td className="px-3 py-2">{d.barang?.deskripsi || '-'}</td>
                       <td className="px-3 py-2">{d.jumlah}</td>
@@ -494,7 +578,11 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
                       <td className="px-3 py-2">{d.barang?.status_lartas || '-'}</td>
                       <td className="px-3 py-2">{d.no_invoice}</td>
                       <td className="px-3 py-2">{d.no_bl}</td>
-                      <td className="px-3 py-2">{d.barang?.required_docs && Array.isArray(d.barang.required_docs) ? d.barang.required_docs.map(doc => doc.docs_type?.nama).filter(Boolean).join(' & ') : '-'}</td>
+                      <td className="px-3 py-2">{
+                        d.barang?.required_docs && Array.isArray(d.barang.required_docs) && d.barang.required_docs.length > 0
+                          ? d.barang.required_docs.map(doc => doc.docs_type?.nama).filter(Boolean).join(' & ')
+                          : '-'
+                      }</td>
                       <td className="px-3 py-2">{d.barang?.instansi ? d.barang.instansi.nama_instansi : '-'}</td>
                     </tr>
                   ))}
@@ -504,6 +592,8 @@ export default function TablePage({ resourceKey, resourceLabel, columns, apiBase
           )}
         </DialogBody>
         <DialogFooter>
+          <Button variant="gradient" color="blue" onClick={handleDownloadExcel} className="font-sans mr-2">Download as Excel</Button>
+          <Button variant="gradient" color="green" onClick={handlePrintTable} className="font-sans mr-2">Print Table</Button>
           <Button variant="text" color="gray" onClick={handleClosePibDialog} className="font-sans">Close</Button>
         </DialogFooter>
       </Dialog>

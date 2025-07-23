@@ -42,7 +42,7 @@ export const routes = [
         name: "PIB",
         path: "/pib",
         element: <TablePage resourceKey="pib" resourceLabel="PIB" columns={[
-          { key: "id", label: "ID" },
+          { key: "createdAt", label: "Created Date" },
           // Add more PIB columns as needed
         ]} />,
       },
