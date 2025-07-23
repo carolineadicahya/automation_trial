@@ -4,6 +4,8 @@ const csv = require("csv-parse");
 const fs = require("fs");
 const Required_Docs = db.required_docs;
 const Instansi = db.instansi;
+const PIB = db.pib;
+const Detail_PIB = db.detail_pib;
 
 // get all
 exports.findAll = async (req, res, next) => {
@@ -133,12 +135,12 @@ exports.importBarang = async (req, res, next) => {
   }
   const results = [];
   const errors = [];
+  const importedBarang = [];
   const parser = fs.createReadStream(req.file.path).pipe(
     csv.parse({ columns: true, trim: true, skip_empty_lines: true, relax_column_count: true })
   );
   for await (const row of parser) {
     try {
-      // Defensive: skip if PN or HSCODE missing
       if (!row["PN"] || !row["HSCODE"]) continue;
       // 1. Instansi
       let id_instansi = null;
@@ -151,35 +153,56 @@ exports.importBarang = async (req, res, next) => {
         instansi = instansi.toJSON();
         id_instansi = instansi["id"];
       }
-      // 2. Barang
-      const barangPayload = {
-        part_number: row["PN"],
-        id_instansi: id_instansi,
-        hs_code: row["HSCODE"],
-        deskripsi: row["DESC"],
-        pos_tarif: parseFloat((row["POS TARIF"] || '').replace('%', '')),
-        status_lartas: row["STATUS"].toUpperCase(),
-      };
-      await Barang.create(barangPayload);
-      // 3. Required Docs
+      // 2. Upsert Barang
+      let barang = await Barang.findOne({ where: { part_number: row["PN"] } });
+      if (!barang) {
+        barang = await Barang.create({
+          part_number: row["PN"],
+          id_instansi: id_instansi,
+          hs_code: row["HSCODE"],
+          deskripsi: row["DESC"],
+          pos_tarif: parseFloat((row["POS TARIF"] || '').replace('%', '')),
+          status_lartas: row["STATUS"].toUpperCase(),
+        });
+      }
+      // 3. Required Docs (upsert docs_type, always create required_docs if not exists)
       const docs = (row["REQUIRED DOCS"] || "").split("&").map((d) => d.trim()).filter((d) => d && d !== "-");
       for (const doc of docs) {
-        // Find or create docs_type
         let docsType = await db.docs_type.findOne({ where: { nama: doc } });
         if (!docsType) {
           docsType = await db.docs_type.create({ nama: doc });
         }
         docsType = docsType.toJSON();
-        await Required_Docs.create({ id_barang: row["PN"], id_docs_type: docsType["id"] });
+        // Only create required_docs if not exists
+        const exists = await db.required_docs.findOne({ where: { id_barang: row["PN"], id_docs_type: docsType["id"] } });
+        if (!exists) {
+          await db.required_docs.create({ id_barang: row["PN"], id_docs_type: docsType["id"] });
+        }
       }
+      // Collect info for frontend
+      barang = await Barang.findOne({
+        where: { part_number: row["PN"] },
+        include: [
+          { model: db.instansi },
+          { model: db.required_docs, include: [{ model: db.docs_type }] }
+        ]
+      });
+      importedBarang.push(barang);
       results.push({ part_number: row["PN"], status: "success" });
     } catch (err) {
       errors.push({ row: row, error: err.message });
     }
   }
+  // 4. Create new PIB (timestamp only)
+  let pib = null;
+  try {
+    pib = await PIB.create({}); // Add any required fields if needed
+  } catch (err) {
+    errors.push({ pib: null, error: 'Failed to create PIB: ' + err.message });
+  }
   // Clean up uploaded file
   fs.unlinkSync(req.file.path);
-  res.json({ code: 200, message: "Import completed", results, errors });
+  res.json({ code: 200, message: "Import completed", results, errors, pib_id: pib ? pib.id : null, barang: importedBarang });
 };
 
 exports.count = async (req, res, next) => {

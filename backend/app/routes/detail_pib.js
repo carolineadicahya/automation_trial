@@ -14,6 +14,9 @@ router.get("/:id", detail_pibController.findOne);
 // POST /api/detail_pib
 router.post("/", detail_pibController.create);
 
+// POST /api/detail_pib/bulk
+router.post("/bulk", detail_pibController.bulkCreate);
+
 // PUT /api/detail_pib/:id
 router.put("/:id", detail_pibController.update);
 

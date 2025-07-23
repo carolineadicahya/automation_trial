@@ -111,3 +111,16 @@ exports.count = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.bulkCreate = async (req, res, next) => {
+  try {
+    const details = req.body.details; // array of { id_pib, id_barang, jumlah, no_invoice, no_bl }
+    if (!Array.isArray(details) || details.length === 0) {
+      return res.status(400).json({ code: 400, message: "No detail_pib data provided" });
+    }
+    const created = await db.detail_pib.bulkCreate(details);
+    res.status(201).json({ code: 201, message: "Detail PIB created", data: created });
+  } catch (err) {
+    next(err);
+  }
+};
