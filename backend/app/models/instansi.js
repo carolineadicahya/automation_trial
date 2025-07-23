@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
     "instansi",
     {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-      nama_instansi: DataTypes.STRING,
+      nama_instansi: { type: DataTypes.STRING, allowNull: false },
     },
     {
       timestamps: true, // hapus kalau pakai createdAt/updatedAt

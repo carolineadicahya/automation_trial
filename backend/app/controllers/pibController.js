@@ -7,6 +7,7 @@ exports.findAll = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   try {
+    // Add includes if associations are defined in the model
     const pibs = await PIB.findAll({ offset, limit });
     if (!pibs || pibs.length === 0) {
       return res.status(404).json({ code: 404, message: "No PIB found" });
@@ -24,6 +25,7 @@ exports.findAll = async (req, res, next) => {
 // get by id
 exports.findOne = async (req, res, next) => {
   try {
+    // Add includes if associations are defined in the model
     const pib = await PIB.findByPk(req.params.id);
     if (!pib) {
       return res.status(404).json({ code: 404, message: "PIB not found" });

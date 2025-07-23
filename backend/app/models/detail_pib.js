@@ -14,12 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     "detail_pib",
     {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
+      id_barang: DataTypes.STRING,
       id_pib: DataTypes.INTEGER,
-      jumlah: DataTypes.INTEGER,
-      dimensi: DataTypes.STRING,
-      mata_uang: DataTypes.STRING,
-      no_invoice: DataTypes.STRING,
-      no_bl: DataTypes.STRING,
+      jumlah: { type: DataTypes.INTEGER, allowNull: false },
+      no_invoice: { type: DataTypes.STRING, allowNull: false },
+      no_bl: { type: DataTypes.STRING, allowNull: false },
     },
     {
       timestamps: true, // hapus kalau pakai createdAt/updatedAt

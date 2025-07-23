@@ -7,11 +7,9 @@ exports.findAll = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   try {
-    const detail_pibs = await Detail_PIB.findAll({ offset, limit });
+    const detail_pibs = await Detail_PIB.findAll({ offset, limit, include: [db.barang, db.pib] });
     if (!detail_pibs || detail_pibs.length === 0) {
-      return res
-        .status(404)
-        .json({ code: 404, message: "No Detail PIB found" });
+      return res.status(404).json({ code: 404, message: "No Detail PIB found" });
     }
     res.json({
       code: 200,
@@ -26,11 +24,9 @@ exports.findAll = async (req, res, next) => {
 // get by id
 exports.findOne = async (req, res, next) => {
   try {
-    const detail_pib = await Detail_PIB.findByPk(req.params.id);
+    const detail_pib = await Detail_PIB.findByPk(req.params.id, { include: [db.barang, db.pib] });
     if (!detail_pib) {
-      return res
-        .status(404)
-        .json({ code: 404, message: "Detail PIB not found" });
+      return res.status(404).json({ code: 404, message: "Detail PIB not found" });
     }
     res.json({
       code: 200,

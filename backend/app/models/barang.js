@@ -14,15 +14,17 @@ module.exports = (sequelize, DataTypes) => {
     "barang",
     {
       part_number: { type: DataTypes.STRING, primaryKey: true },
-      hs_code: DataTypes.STRING,
-      deskripsi: DataTypes.TEXT,
-      pos_tarif: DataTypes.DOUBLE,
-      status_lartas: DataTypes.ENUM(
-        "LARTAS EXPORT",
-        "LARTAS IMPORT",
-        "NON-LARTAS"
-      ),
-      satuan: DataTypes.STRING,
+      id_instansi: DataTypes.INTEGER,
+      deskripsi: { type: DataTypes.TEXT, allowNull: false },
+      hs_code: { type: DataTypes.STRING, allowNull: false },
+      pos_tarif: { type: DataTypes.DOUBLE, allowNull: false },
+      status_lartas: {
+        type: DataTypes.ENUM(
+          "LARTAS EXPORT",
+          "LARTAS IMPORT",
+          "NON-LARTAS"
+        ), allowNull: false
+      },
     },
     {
       timestamps: true, // hapus kalau pakai createdAt/updatedAt

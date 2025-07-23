@@ -11,7 +11,7 @@ exports.findAll = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   try {
-    const barangs = await Barang.findAll({ offset, limit });
+    const barangs = await Barang.findAll({ offset, limit, include: [{ model: db.instansi }] });
     if (!barangs || barangs.length === 0) {
       return res.status(404).json({ code: 404, message: "No barang found" });
     }
@@ -28,7 +28,7 @@ exports.findAll = async (req, res, next) => {
 // get by id
 exports.findOne = async (req, res, next) => {
   try {
-    const barang = await Barang.findByPk(req.params.id);
+    const barang = await Barang.findByPk(req.params.id, { include: [{ model: db.instansi }] });
     if (!barang) {
       return res.status(404).json({ code: 404, message: "Barang not found" });
     }
@@ -142,20 +142,23 @@ exports.importBarang = async (req, res, next) => {
       // 2. Barang
       const barangPayload = {
         part_number: row["PN"],
+        id_instansi: id_instansi,
         hs_code: row["HSCODE"],
         deskripsi: row["DESC"],
         pos_tarif: parseFloat((row["POS TARIF"] || '').replace('%', '')),
         status_lartas: row["STATUS"].toUpperCase(),
-        satuan: "-",
-        id_instansi: id_instansi,
       };
       await Barang.create(barangPayload);
       // 3. Required Docs
-      const docs = (row["REQUIRED DOCS"] || "").split("&").map((d) => d.trim()).filter(Boolean);
+      const docs = (row["REQUIRED DOCS"] || "").split("&").map((d) => d.trim()).filter((d) => d && d !== "-");
       for (const doc of docs) {
-        if (doc !== "-") {
-          await Required_Docs.create({ id_barang: row["PN"], tipe_dokumen: doc });
+        // Find or create docs_type
+        let docsType = await db.docs_type.findOne({ where: { nama: doc } });
+        if (!docsType) {
+          docsType = await db.docs_type.create({ nama: doc });
         }
+        docsType = docsType.toJSON();
+        await Required_Docs.create({ id_barang: row["PN"], id_docs_type: docsType["id"] });
       }
       results.push({ part_number: row["PN"], status: "success" });
     } catch (err) {

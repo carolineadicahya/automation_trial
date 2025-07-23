@@ -7,7 +7,7 @@ exports.findAll = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const offset = (page - 1) * limit;
   try {
-    const required_docss = await Required_Docs.findAll({ offset, limit });
+    const required_docss = await Required_Docs.findAll({ offset, limit, include: [db.barang, db.docs_type] });
     if (!required_docss || required_docss.length === 0) {
       return res
         .status(404)
@@ -26,7 +26,7 @@ exports.findAll = async (req, res, next) => {
 // get by id
 exports.findOne = async (req, res, next) => {
   try {
-    const required_docs = await Required_Docs.findByPk(req.params.id);
+    const required_docs = await Required_Docs.findByPk(req.params.id, { include: [db.barang, db.docs_type] });
     if (!required_docs) {
       return res
         .status(404)

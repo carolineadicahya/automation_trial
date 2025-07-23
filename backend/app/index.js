@@ -15,21 +15,15 @@ app.use(express.urlencoded({ extended: true }));
 
 const barangRoutes = require('./routes/barang');
 const detailPibRoutes = require('./routes/detail_pib');
-const importirRoutes = require('./routes/importir');
 const instansiRoutes = require('./routes/instansi');
-const penjualRoutes = require('./routes/penjual');
 const pibRoutes = require('./routes/pib');
 const requiredDocsRoutes = require('./routes/required_docs');
-const saranaPengangkutanRoutes = require('./routes/sarana_pengangkutan');
 
 app.use('/api/barang', barangRoutes);
 app.use('/api/detail_pib', detailPibRoutes);
-app.use('/api/importir', importirRoutes);
 app.use('/api/instansi', instansiRoutes);
-app.use('/api/penjual', penjualRoutes);
 app.use('/api/pib', pibRoutes);
 app.use('/api/required_docs', requiredDocsRoutes);
-app.use('/api/sarana_pengangkutan', saranaPengangkutanRoutes);
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
